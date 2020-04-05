@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/I1"
+        android:title="@string/viewT" />
+    <item
+        android:id="@+id/I2"
+        android:title="@string/AddNotes" />
+
+    <item
+        android:id="@+id/I4"
+        android:icon="@android:color/holo_red_light"
+        android:title="@string/deleteTrip" />
+</menu>

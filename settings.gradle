@@ -1,2 +1,2 @@
-rootProject.name='TripPlanner'
+rootProject.name='tripplanner3'
 include ':app'
