@@ -47,7 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import static android.widget.Toast.LENGTH_LONG;
-
+// HomeActivity
 public class HomeActivity extends AppCompatActivity implements Changes_SQL {
     RecyclerView rec;
     RecyclerView.LayoutManager layoutManager;
