@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class roundFragment extends Fragment {
+public class RoundTripFragment extends Fragment {
 
 
     Button btnTimePicker2, btnDatePicker2;
@@ -27,7 +27,7 @@ public class roundFragment extends Fragment {
     // Intent intent;
 
 
-    public roundFragment() {
+    public RoundTripFragment() {
         // Required empty public constructor
     }
 
@@ -42,7 +42,7 @@ public class roundFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.round_fragment, container, false);
+        View v = inflater.inflate(R.layout.round_trip_fragment, container, false);
         btnDatePicker2 = v.findViewById(R.id.btn_date2);
         btnTimePicker2 = v.findViewById(R.id.btn_time2);
         txtDate2 = v.findViewById(R.id.in_date2);

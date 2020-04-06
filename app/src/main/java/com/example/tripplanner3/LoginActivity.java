@@ -90,6 +90,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signIn(email_textfield.getText().toString(), password_textfield.getText().toString());
+                Intent goToHome = new Intent(getApplicationContext(), HomeActivity.class);
+                goToHome.putExtra("EMAIL",email_textfield.getText().toString());
+                startActivity(goToHome);
             }
         });
 

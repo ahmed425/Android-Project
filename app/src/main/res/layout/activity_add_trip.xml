@@ -137,7 +137,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/in_date_add"
+                        android:id="@+id/txtvdate"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="75dp"
@@ -145,7 +145,7 @@
                         android:textSize="15dp" />
 
                     <TextView
-                        android:id="@+id/in_time_add"
+                        android:id="@+id/txtvtime"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -211,4 +211,5 @@
 
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

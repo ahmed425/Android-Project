@@ -43,27 +43,39 @@ import java.util.List;
 import java.util.Locale;
 
 public class AddTripActivity extends AppCompatActivity implements View.OnClickListener,roundTripInt {
+    //Trip name Edit Text
     EditText trip_nametxt;
+  //Log to check
     public static final String TAG = "MyActivity";
-
-    Button btnTimePicker, btnDatePicker, Next,addNote;
+// buttons
+    Button btnTimePicker, btnDatePicker, addTrip;
+    // Date and Time Text views
     TextView txtDate,txtTime;
-    FragmentManager mgr;
+//fragment mgr to add RoundTrip fragment to add trip activity when user chooses Two way Trip
+ FragmentManager mgr;
+
     private int mYear,mMonth,mDay,mHour,mMin;
-    String trip_name, spoint="", sLat="", sLong="", epoint="", eLat="", eLong="", status, sdate,totaltime,rdate,rtime;
+   //  trip details
+    String trip_name, spoint="", sLat="", sLong="", epoint="", eLat="", eLong="", status, tripDate,tripTime,rdate,rtime;
+    // Longitude&Latitude Values(Double)
     double mysLat, mysLong, myeLat, myeLong;
-    int rep, position,position2;
+    //repetition & choosing from spinner(drop down list)  : (daily,weekly,monthly) : (one way ,Two Way)
+    int repeat, position,position2;
+    //Spinners : Drop down Lists
     Spinner spinner1,spinner2;
-    roundFragment myFrag;
-    roundFragment r;
+    //RoundTripFragment
+    RoundTripFragment myFrag;
     SharedPreferences saving;
+//    AutoCompleteTextView (2) for entering the trip starting & End Points
     public  AutoCompleteTextView  autoCompleteTextView1,autoCompleteTextView2;
     public static final String saveData="NewData";
+    //user represnted by mail string
     String user;
-    HashMap<Integer, Date> myData = new HashMap<Integer, Date>();
-    ArrayList<PendingIntent> allPendingIntent;
+    // HashMap to save trip_id with corresponding date
+    HashMap<Integer, Date> tripData = new HashMap<>();
+
     int hours,min;
-    int num;
+
     Date date;
     Date date2;
     Date myTime;
@@ -89,14 +101,14 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
         autoCompleteTextView2.setAdapter(new PlaceAutoSuggestAdapter(AddTripActivity.this,android.R.layout.simple_list_item_1));
         btnDatePicker = findViewById(R.id.btn_date_add);
         btnTimePicker = findViewById(R.id.btn_time_add);
-        txtDate = findViewById(R.id.in_date_add);
-        txtTime = findViewById(R.id.in_time_add);
+        txtDate = findViewById(R.id.txtvdate);
+        txtTime = findViewById(R.id.txtvtime);
         btnDatePicker.setOnClickListener(this);
         btnTimePicker.setOnClickListener(this);
         trip_nametxt = findViewById(R.id.trip_name);
 //        addNote=findViewById(R.id.note_add);
-        Next = findViewById(R.id.trip_add);
-        Next.setOnClickListener(this);
+        addTrip = findViewById(R.id.trip_add);
+        addTrip.setOnClickListener(this);
         spinner1 = findViewById(R.id.spinner1_add);
         saving=getSharedPreferences(saveData,0);
         //user = saving.getString("user", "null");
@@ -209,7 +221,7 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 position2 = i;
                 if (position2 == 1 && flagfrag) {
-                    myFrag = new roundFragment();
+                    myFrag = new RoundTripFragment();
                     mgr = getSupportFragmentManager();
                     FragmentTransaction trans = mgr.beginTransaction();
                     trans.add(R.id.myScrollView_add, myFrag, "myNewFrag");
@@ -338,49 +350,6 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onStart() {
         super.onStart();
-//        AutocompleteSupportFragment autocompleteFragment1 = (AutocompleteSupportFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_add);
-//        AutocompleteSupportFragment autocompleteFragment1 = (AutocompleteSupportFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_add);
-//        if (autocompleteFragment1 != null)
-//            autocompleteFragment1.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//                @Override
-//                public void onPlaceSelected(Place place) {
-//                     TODO: Get info about the selected place.
-//                    Log.i(TAG, "Place: " + place.gettrip_name());
-//                    spoint = place.getName().toString();
-//                    LatLng myLatLong = place.getLatLng();
-//                    mysLat = myLatLong.latitude;
-//                    mysLong = myLatLong.longitude;
-//                    sLat = mysLat + "";
-//                    sLong = mysLong + "";
-
-
-//                }
-
-
-//        else Toast.makeText(this, "Problem with loading page", Toast.LENGTH_LONG).show();
-
-
-//        PlaceAutocompleteFragment autocompleteFragment2 = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment2_add);
-//        AutocompleteSupportFragment autocompleteFragment2 = (AutocompleteSupportFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment2_add);
-//        if (autocompleteFragment2 != null )
-//            autocompleteFragment2.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//                @Override
-//                public void onPlaceSelected(Place place) {
-//                     TODO: Get info about the selected place./
-//                    Log.i(TAG, "Place: " + place.gettrip_name());
-//                    String placetrip_name = place.gettrip_name().toString();
-//                      Toast.makeText(MainActivity.this, "the place is "+ placetrip_name ,Toast.LENGTH_SHORT).show();
-//                    epoint = place.getName().toString();
-//                    LatLng myLatLong = place.getLatLng();
-//                    myeLat = myLatLong.latitude;
-//                    myeLong = myLatLong.longitude;
-//                    eLat = my//eLat + "";
-//                    eLong = myeLong + "";
-//                }
-
-
     }
 
 
@@ -391,11 +360,10 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
-
             DatePickerDialog datePickerDialog = new DatePickerDialog(view.getContext(),
                     new DatePickerDialog.OnDateSetListener() {
 
-                        @Override
+                @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                             String myDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
                             String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
@@ -483,7 +451,7 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                     }, mHour, mMin, false);
             timePickerDialog.show();
         }
-        if (view == Next &&  new CheckPermissions(this).checkInternet()){
+        if (view == addTrip &&  new CheckPermissions(this).checkInternet()){
             Log.i(TAG, "MyClass.getView() — get item number " + !trip_nametxt.getText().toString().isEmpty() +
                     !txtTime.getText().toString().isEmpty()+
                     !sLat.isEmpty() + !sLong.isEmpty());
@@ -502,21 +470,21 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
 //            }
                 status = "upcoming";
                 trip_name = trip_nametxt.getText().toString();
-                sdate = txtDate.getText().toString();
-                totaltime = txtTime.getText().toString();
+                tripDate = txtDate.getText().toString();
+                tripTime = txtTime.getText().toString();
 
                 if (position == 0)
-                    rep = 0;
+                    repeat = 0;
                 if (position == 1)
-                    rep = 1;
+                    repeat = 1;
                 if (position == 2)
-                    rep = 7;
+                    repeat = 7;
                 if (position == 3)
-                    rep = 30;
+                    repeat = 30;
 
                 if (position2 == 0) {
                     Log.i("insertsql", "done");
-                    long i = adapter.insertTrip(trip_name, spoint, sLong, sLat, epoint, eLong, eLat, status, sdate, "null", totaltime, null, rep, user, null);
+                    long i = adapter.insertTrip(trip_name, spoint, sLong, sLat, epoint, eLong, eLat, status, tripDate, "null", tripTime, null, repeat, user, null);
 //                    db.child(auth.getCurrentUser().getUid()).child()
 
                 } else if (position2 == 1) {
@@ -525,7 +493,7 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                     Calendar myCalOne = Calendar.getInstance();
                     Calendar myCalTwo = Calendar.getInstance();
                     try {
-                        Date dateOne = format.parse(sdate + " " + hours + ":" + min);
+                        Date dateOne = format.parse(tripDate + " " + hours + ":" + min);
                         myCalOne.setTime(dateOne);
 //                    myCalOne.set(Calendar.HOUR_OF_DAY,hours);
 //                    myCalOne.set(Calendar.MINUTE,min);
@@ -540,8 +508,8 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                         inserted2 = false;
                     } else {
                         Log.i("insertsql", "done");
-                        long i = adapter.insertTrip(trip_name, spoint, sLong, sLat, epoint, eLong, eLat, status, sdate, "null", totaltime, null, rep, user, null);
-                        long i2 = adapter.insertTrip(trip_name, epoint, eLong, eLat, spoint, sLong, sLat, status, rdate, "null", rtime, null, rep, user, null);
+                        long i = adapter.insertTrip(trip_name, spoint, sLong, sLat, epoint, eLong, eLat, status, tripDate, "null", tripTime, null, repeat, user, null);
+                        long i2 = adapter.insertTrip(trip_name, epoint, eLong, eLat, spoint, sLong, sLat, status, rdate, "null", rtime, null, repeat, user, null);
                         inserted2 = true;
                     }
                     ////////////////////////
@@ -566,7 +534,7 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    myData.put(id, date2);
+                    tripData.put(id, date2);
                     ////////////////////////////////////
                     db = FirebaseDatabase.getInstance().getReference();
                     mAuth = FirebaseAuth.getInstance();
@@ -609,7 +577,7 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    myData.put(id, date2);
+                    tripData.put(id, date2);
                     ////////////////////////////////////
                     db = FirebaseDatabase.getInstance().getReference();
                     mAuth = FirebaseAuth.getInstance();
@@ -643,7 +611,7 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    myData.put(id, date2);
+                    tripData.put(id, date2);
                     ////////////////////////////////////
                     db = FirebaseDatabase.getInstance().getReference();
                     mAuth = FirebaseAuth.getInstance();

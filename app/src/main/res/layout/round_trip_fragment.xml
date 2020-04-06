@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/color"
     android:orientation="vertical"
-    tools:context="com.example.tripplanner3.roundFragment">
+    tools:context="com.example.tripplanner3.RoundTripFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
